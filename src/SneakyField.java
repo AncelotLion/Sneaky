@@ -23,6 +23,7 @@ public class SneakyField extends JPanel implements ActionListener {
     private boolean up = false;
     private boolean down = false;
     private boolean inGame = true;
+    char direction = 'R';
     boolean running = false;
 
 
@@ -30,7 +31,7 @@ public class SneakyField extends JPanel implements ActionListener {
         setBackground(Color.BLACK);
         loadImages();
         initGame();
-        addKeyListener(new FieldKeyListener());
+        this.addKeyListener(new FieldKeyListener());
         setFocusable(true);
 
     }
@@ -42,7 +43,7 @@ public class SneakyField extends JPanel implements ActionListener {
             y[i] = 48;
         }*/
         running = true;
-        timer = new Timer(250, this);
+        timer = new Timer(2500, this);
         timer.start();
         createApple();
 
@@ -65,17 +66,16 @@ public class SneakyField extends JPanel implements ActionListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (inGame) {
-                g.drawImage(apple, appleX, appleY, this);
-                for (int i = 0; i < dots; i++) {
-                    g.drawImage(dot, x[i], y[i], this);
-                }
-        }
-        else {
+            g.drawImage(apple, appleX, appleY, this);
+            for (int i = 0; i < dots; i++) {
+                g.drawImage(dot, x[i], y[i], this);
+            }
+        } else {
             String str = "Game Over";
             //Font f = new Font("Arial",14,Font.BOLD);
             g.setColor(Color.WHITE);
             //g.setFont(f);
-            g.drawString(str, 250, Size/2);
+            g.drawString(str, 250, Size / 2);
         }
     }
 
@@ -85,17 +85,20 @@ public class SneakyField extends JPanel implements ActionListener {
             x[i] = x[i - 1];
             y[i] = y[i - 1];
         }
-        if (left) {
-            x[0] -= dotSize;
-        }
-        if (right) {
-            x[0] += dotSize;
-        }
-        if (up) {
-            y[0] -= dotSize;
-        }
-        if (down) {
-            y[0] += dotSize;
+
+        switch (direction) {
+            case 'U':
+                y[0] = y[0] - dotSize;
+                break;
+            case 'D':
+                y[0] = y[0] + dotSize;
+                break;
+            case 'L':
+                x[0] = x[0] - dotSize;
+                break;
+            case 'R':
+                x[0] = x[0] + dotSize;
+                break;
         }
     }
 
@@ -144,27 +147,27 @@ public class SneakyField extends JPanel implements ActionListener {
     class FieldKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            super.keyPressed(e);
-            int key = e.getKeyCode();
-            if (key == KeyEvent.VK_LEFT && !right) {
-                left = true;
-                up = false;
-                down = false;
-            }
-            if (key == KeyEvent.VK_RIGHT && !left) {
-                right = true;
-                up = false;
-                down = false;
-            }
-            if (key == KeyEvent.VK_UP && !down) {
-                up = true;
-                left = false;
-                right = false;
-            }
-            if (key == KeyEvent.VK_DOWN && !up) {
-                down = true;
-                left = false;
-                right = false;
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_LEFT:
+                    if (direction != 'R') {
+                        direction = 'L';
+                    }
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    if (direction != 'L') {
+                        direction = 'R';
+                    }
+                    break;
+                case KeyEvent.VK_UP:
+                    if (direction != 'D') {
+                        direction = 'U';
+                    }
+                    break;
+                case KeyEvent.VK_DOWN:
+                    if (direction != 'U') {
+                        direction = 'D';
+                    }
+                    break;
             }
         }
     }
