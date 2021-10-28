@@ -18,16 +18,14 @@ public class SneakyField extends JPanel implements ActionListener {
     private int[] y = new int[allDots];
     private int dots;
     private Timer timer;
-    private boolean left = false;
-    private boolean right = true;
-    private boolean up = false;
-    private boolean down = false;
     private boolean inGame = true;
     char direction = 'R';
     boolean running = false;
+    Random random;
 
 
     public SneakyField() {
+        random = new Random();
         setBackground(Color.BLACK);
         loadImages();
         initGame();
@@ -43,7 +41,7 @@ public class SneakyField extends JPanel implements ActionListener {
             y[i] = 48;
         }*/
         running = true;
-        timer = new Timer(2500, this);
+        timer = new Timer(250, this);
         timer.start();
         createApple();
 
@@ -99,6 +97,7 @@ public class SneakyField extends JPanel implements ActionListener {
             case 'R':
                 x[0] = x[0] + dotSize;
                 break;
+
         }
     }
 
@@ -116,20 +115,20 @@ public class SneakyField extends JPanel implements ActionListener {
 
     public void checkCollisions() {
         for (int i = dots; i > 0; i--) {
-            if (i > 4 && x[0] == x[i] && y[0] == y[i]) {
+            if ((i > 4 && x[0] == x[i]) && (y[0] == y[i])) {
                 inGame = false;
             }
         }
         if (x[0] > Size) {
             inGame = false;
         }
-        if (x[0] > 0) {
+        if (x[0] < 0) {
             inGame = false;
         }
         if (y[0] > Size) {
             inGame = false;
         }
-        if (x[0] > 0) {
+        if (y[0] < 0) {
             inGame = false;
         }
     }
