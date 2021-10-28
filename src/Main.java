@@ -5,6 +5,7 @@ public class Main extends JFrame{
         setTitle("Sneaky");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(600, 600);
+        this.setResizable(false);
         setLocation(400,400);
         add(new SneakyField());
         setVisible(true);
