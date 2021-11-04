@@ -8,12 +8,13 @@ import java.util.Random;
 
 public class SneakyField extends JPanel implements ActionListener {
     private final int Size = 600;
+    private final int allDots = 200;
     private final int dotSize = 16;
-    private final int allDots = 400;
     private Image dot;
     private Image apple;
     private int appleX;
     private int appleY;
+    int applesEaten;
     private int[] x = new int[allDots];
     private int[] y = new int[allDots];
     private int dots;
@@ -36,10 +37,6 @@ public class SneakyField extends JPanel implements ActionListener {
 
     public void initGame() {
         dots = 3;
-        /*for (int i = 0; i < dots; i++) {
-            x[i] = 48 - i * dotSize;
-            y[i] = 48;
-        }*/
         running = true;
         timer = new Timer(250, this);
         timer.start();
@@ -60,6 +57,7 @@ public class SneakyField extends JPanel implements ActionListener {
         apple = iia2.getImage();
     }
 
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -70,11 +68,22 @@ public class SneakyField extends JPanel implements ActionListener {
             }
         } else {
             String str = "Game Over";
-            //Font f = new Font("Arial",14,Font.BOLD);
             g.setColor(Color.WHITE);
-            //g.setFont(f);
             g.drawString(str, 250, Size / 2);
         }
+
+        g.setColor(Color.red);
+        g.setFont(new Font("Ink Free", Font.BOLD, 20));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString("Score: " + applesEaten, (Size - metrics.stringWidth("Score: " + applesEaten)) / 2, g.getFont().getSize());
+
+        if (x[0] == appleX && y[0] == appleY) {
+            g.setColor(Color.red);
+            g.setFont(new Font("Ink Free", Font.BOLD, 20));
+            FontMetrics metrics1 = getFontMetrics(g.getFont());
+            g.drawString("bllbllbll", Size - metrics1.stringWidth("bllbllbll") * 6, Size - metrics1.stringWidth("bllbllbll") * 8);
+        }
+
     }
 
 
@@ -106,8 +115,9 @@ public class SneakyField extends JPanel implements ActionListener {
             {
                 dots++;
                 if (dots % 5 == 0) {
-                    timer.setDelay(timer.getDelay() - 50);
+                    timer.setDelay(timer.getDelay() - 5);
                 }
+                applesEaten++;
                 createApple();
             }
         }
@@ -132,6 +142,7 @@ public class SneakyField extends JPanel implements ActionListener {
             inGame = false;
         }
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
